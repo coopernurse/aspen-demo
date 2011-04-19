@@ -17,8 +17,11 @@ c.disconnect()
 
 c = stomp.StompClient()
 c.connect()
-c.subscribe('/queue/campaign')
+c.subscribe('/queue/campaign', auto_ack=False,
+            headers={ 'activemq.prefetchSize' : 1 })
 got = c.receive(1)
+if got:
+    c.ack(got.headers['message-id'])
 c.disconnect()
 
 

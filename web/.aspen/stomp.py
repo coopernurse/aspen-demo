@@ -5,6 +5,7 @@
 import diesel
 import time
 import uuid
+from cStringIO import StringIO
 
 STOMP_PORT = 61613
 
@@ -152,14 +153,20 @@ class StompClient(diesel.Client):
         #      (command, str(headers), str(body))
         if body:
             headers["content-length"] = len(body)
-        diesel.send(command+"\n")
+        out = StringIO()
+        out.write(command)
+        out.write("\n")
         if headers:
             for k,v in headers.items():
-                diesel.send(k + ": " + str(v) + "\n")
-        diesel.send("\n")
+                out.write(k)
+                out.write(":")
+                out.write(str(v))
+                out.write("\n")
+        out.write("\n")
         if body:
-            diesel.send(body)
-        diesel.send(chr(0))
+            out.write(body)
+        out.write(chr(0))
+        diesel.send(out.getvalue())
 
     def _read_frame(self, timeout=-1):
         self.timeout = timeout
