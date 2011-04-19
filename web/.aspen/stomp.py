@@ -198,7 +198,7 @@ class StompClient(diesel.Client):
         # TODO: ActiveMQ sends an extra \n after the null terminator
         # RabbitMQ doesn't.. spec doesn't seem to mention it.
         # need a way to detect this anomoly and deal..
-        line = self._readline()
+        #line = self._readline()
 
         #print "RECV: command=%s headers=%s body=%s" % \
         #      (frame.command, frame.headers, frame.body)
