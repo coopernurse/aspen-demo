@@ -1,0 +1,5 @@
+aspen==0.9.33
+diesel==2.0.0
+greenlet==0.3.1
+pyOpenSSL==0.12
+wsgiref==0.1.2
