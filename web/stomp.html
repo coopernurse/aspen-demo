@@ -9,39 +9,23 @@ import time
 
 
 
-timings = [ ]
-sent = "hello world"
+sent = "hello world: " + str(time.time())
 c = stomp.StompClient()
-start = time.time()
 c.connect()
-timings.append("connect: %.2f" % (time.time() - start))
-start = time.time()
 c.send('/queue/campaign', sent)
-timings.append("send: %.2f" % (time.time() - start))
-start = time.time()
 c.disconnect()
-timings.append("disconnect: %.2f" % (time.time() - start))
-
 
 c = stomp.StompClient()
 c.connect()
-start = time.time()
 c.subscribe('/queue/campaign')
-timings.append("subscribe: %.2f" % (time.time() - start))
-start = time.time()
 got = c.receive(1)
-timings.append("receive: %.2f" % (time.time() - start))
-start = time.time()
 c.disconnect()
-timings.append("disconnect: %.2f" % (time.time() - start))
-
 
 
 Sent message: {{ sent }}
 <br />
-Go message: {{ got.body }}
-<ul>
-{% for t in timings %}
-    <li>{{ t }}</li>
+{% if got %}
+    Got message: {{ got.body }}
+{% else %}
+    No message received.  Maybe another client read it?
 {% end %}
-</ul>
